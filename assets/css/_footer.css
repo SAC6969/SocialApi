@@ -1,0 +1,23 @@
+#layout-footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  color: white;
+  background: grey;
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between; }
+  #layout-footer #copyright {
+    width: 80%; }
+  #layout-footer #menu-footer {
+    width: 20%; }
+  #layout-footer a {
+    color: white;
+    text-decoration: none; }
+  #layout-footer .footer-nav ul {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    list-style: none; }
