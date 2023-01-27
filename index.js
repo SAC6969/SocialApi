@@ -7,12 +7,17 @@ const db = require('./config/mongoose.js');
 const session = require('express-session');
 const passport = require('passport');
 const passportLocal = require('./config/passport-local-strategy');
+const passportJWT = require('./config/passport-jwt-strategy');
+const passportGoogle = require('./config/passport-google-oauth2-strategy');
 const MongoStore = require('connect-mongo');
-
+const flash = require('connect-flash');
+const customMware = require('./config/middleware');
+const multer  = require('multer')
 
 app.use(express.urlencoded());
 app.use(cookieParser());
-app.use(express.static('./assets'))
+app.use(express.static('./assets'));
+app.use('/uploads',express.static(__dirname+'/uploads'));
 app.use(expressLayouts);
 
 // extract style and script
@@ -47,6 +52,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.setAuthenticateUser);
+
+app.use(flash());
+app.use(customMware.setFlash);
 
 // use router 
 app.use('/',require('./routes'));
