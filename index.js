@@ -1,4 +1,5 @@
 const express = require('express');
+const env = require('./config/enveronment');
 const cookieParser = require('cookie-parser');
 const app = express();
 const PORT = 8000;
@@ -12,14 +13,24 @@ const passportGoogle = require('./config/passport-google-oauth2-strategy');
 const MongoStore = require('connect-mongo');
 const flash = require('connect-flash');
 const customMware = require('./config/middleware');
-const multer  = require('multer')
+const multer  = require('multer');
+const cors = require('cors')
+app.use(cors())
+
+//sockets
+const chatServer = require('http').Server(app);
+const chatSocket = require('./config/chat_sockets').chatSockets(chatServer);
+
+chatServer.listen(5000);
+console.log("Chat server is listening on port 5000");
+
+//
 
 app.use(express.urlencoded());
 app.use(cookieParser());
-app.use(express.static('./assets'));
+app.use(express.static(env.assets_path));
 app.use('/uploads',express.static(__dirname+'/uploads'));
 app.use(expressLayouts);
-
 // extract style and script
 app.set('layout extractStyles',true);
 app.set('layout extractScripts',true);
@@ -31,7 +42,7 @@ app.set('views','./views');
 // mongo store use to save session cookie in th db
 app.use(session({
     name: 'Codeial',
-    secret: 'blahsomething',
+    secret: env.session_cookie_key,
     saveUninitialized: false, 
     resave: false,
     cookie: {
